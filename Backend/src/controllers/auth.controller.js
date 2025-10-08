@@ -6,22 +6,22 @@ export const signup = async (req, res) => {
     const { fullName, email, password } = req.body
 
     try {
-        if(!fullName || !email || !password) {
+        if (!fullName || !email || !password) {
             return res.status(400).json({ message: "All fields are required" })
         }
 
-        if(password.length < 6) {
+        if (password.length < 6) {
             return res.status(400).json({ message: "Password must be at least 6 characters" })
         }
 
         //checks if email is valid: regex
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!emailRegex.test(email)) {
+        if (!emailRegex.test(email)) {
             return res.status(400).json({ message: "Please enter a valid email" })
         }
 
-        const user = await User.findOne({email:email});
-        if(user) {
+        const user = await User.findOne({ email: email });
+        if (user) {
             return res.status(400).json({ message: "User already exists" })
         }
 
@@ -34,20 +34,19 @@ export const signup = async (req, res) => {
             password: hashedPassword
         })
 
-        if(newUser) {
-            generateToken(newUser._id, res)
-            await newUser.save();
-
+        if (newUser) {
+            const savedUser = await newUser.save();
+            generateToken(savedUser._id, res); // send token in cookie
             res.status(201).json({
-                _id:newUser._id,
-                fullName:newUser.fullName,
-                email:newUser.email,
-                profilePic:newUser.profilePic
+                _id: newUser._id,
+                fullName: newUser.fullName,
+                email: newUser.email,
+                profilePic: newUser.profilePic
             })
-        }else {
+        } else {
             res.status(400).json({ message: "Invalid user data" })
         }
-    }catch (error) {
+    } catch (error) {
         console.log("Error in signup controller: ", error);
         res.status(500).json({ message: "Internal Server Error" })
     }
