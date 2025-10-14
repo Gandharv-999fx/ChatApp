@@ -20,5 +20,8 @@
     "url": "https://github.com/Gandharv-999fx/ChatApp/issues"
   },
   "homepage": "https://github.com/Gandharv-999fx/ChatApp#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6"
+  }
 }
