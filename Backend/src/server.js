@@ -1,6 +1,7 @@
 // const express = require('express');
 import express from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { ENV } from './lib/env.js';
 
@@ -10,7 +11,10 @@ import { connectDB } from './lib/db.js';
 
 const app = express();
 app.use(express.json()); // to parse json data from request body
-const __dirname = path.resolve();
+
+// Resolve directory for ESM reliably in deployment environments
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = ENV.PORT || 3000;
 
@@ -20,10 +24,11 @@ app.use("/api/messages", messageRoutes);
 
 //Deployment 
 if (ENV.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, "../Frontend/dist")));
+    const distPath = path.resolve(__dirname, "../Frontend/dist");
+    app.use(express.static(distPath));
     app.get('*', (_, res) => {
-        res.sendFile(path.join(__dirname, "../Frontend/dist/index.html"));
-    })
+        res.sendFile(path.join(distPath, "index.html"));
+    });
 }
 
 app.listen(PORT, () => {  
