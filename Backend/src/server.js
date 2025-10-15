@@ -1,7 +1,9 @@
 // const express = require('express');
 import express from 'express';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
+
 
 import { ENV } from './lib/env.js';
 
@@ -11,8 +13,9 @@ import { connectDB } from './lib/db.js';
 
 const app = express();
 app.use(express.json()); // to parse json data from request body
+app.use(cookieParser()); // to parse cookies from request headers
 
-// Resolve directory for ESM reliably in deployment environments
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -31,7 +34,7 @@ if (ENV.NODE_ENV === 'production') {
     });
 }
 
-app.listen(PORT, () => {  
+app.listen(PORT, () => {
     console.log('Server is running on port: ' + PORT);
     connectDB();
 })

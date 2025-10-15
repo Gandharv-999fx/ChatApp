@@ -6,7 +6,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "npm ci --prefix Backend && npm ci --prefix Frontend && npm run build --prefix Frontend",
+    "build": "npm ci --prefix Backend && npm ci --prefix Frontend --include=dev && npm run build --prefix Frontend",
     "start": "npm run start --prefix Backend"
   },
   "repository": {
