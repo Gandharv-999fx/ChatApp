@@ -28,7 +28,7 @@ export const getMessagesByUserId = async (req, res) => {
         });
 
         res.status(200).json(messages);
-    } catch {
+    } catch (error) {
         console.log("Error in getMessages controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
@@ -36,14 +36,18 @@ export const getMessagesByUserId = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
     try {
-        const { text, image } = req.body
+        const { text, image } = req.body;
         const { id: receiverId } = req.params
         const senderId = req.user._id
+
+        if (!text?.trim() && !image) {
+            return res.status(400).json({ message: "Text or image is required" });
+        }
 
         let imageUrl;
         if (image) {
             const uploadResponse = await cloudinary.uploader.upload(image);
-            imageUrl = uploadResponse.secureUrl;
+            imageUrl = uploadResponse.secure_url;
         }
 
         const newMessage = new Message({
@@ -74,7 +78,7 @@ export const getChatPartners = async (req, res) => {
         })
 
         const chatPartnerIds = [
-            ...new set(
+            ...new Set(
                 messages.map(msg =>
                     msg.senderId.toString() === loggedInUserId.toString()
                         ? msg.receiverId.toString()
@@ -83,7 +87,7 @@ export const getChatPartners = async (req, res) => {
             )
         ]
 
-        const chatPartners = await User.find({ _id: { $in: chatPartnerIds } }).select(-password)
+        const chatPartners = await User.find({ _id: { $in: chatPartnerIds } }).select("-password")
 
         res.status(200).json(chatPartners)
 
