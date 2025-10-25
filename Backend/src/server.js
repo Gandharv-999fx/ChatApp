@@ -10,9 +10,14 @@ import { ENV } from './lib/env.js';
 import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
 import { connectDB } from './lib/db.js';
+import cors from "cors";
 
 const app = express();
 app.use(express.json()); // to parse json data from request body
+app.use(cors({
+    origin: ENV.CLIENT_URL,
+    credentials: true,
+}));
 app.use(cookieParser()); // to parse cookies from request headers
 
 
