@@ -13,7 +13,7 @@ import { connectDB } from './lib/db.js';
 import cors from "cors";
 
 const app = express();
-app.use(express.json()); // to parse json data from request body
+app.use(express.json({ limit: "5mb" })); // to parse json data from request body
 app.use(cors({
     origin: ENV.CLIENT_URL,
     credentials: true,
