@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import ChatPage from './pages/ChatPage'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
-import useAuthStore from './store/useAuthStore.js'
+import { useAuthStore } from './store/useAuthStore.js'
 import { PageLoader } from './components/PageLoader.jsx'
 import { Toaster } from 'react-hot-toast'
 
