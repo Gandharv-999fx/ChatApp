@@ -10,7 +10,7 @@ function ChatContainer() {
   const {
     selectedUser,
     getMessagesByUserId,
-    messages,
+    messages =[],
     isMessagesLoading,
     subscribeToMessages,
     unsubscribeFromMessages,

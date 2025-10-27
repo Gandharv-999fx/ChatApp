@@ -6,13 +6,14 @@ import { fileURLToPath } from 'url';
 
 
 import { ENV } from './lib/env.js';
+import { app, server } from './lib/socket.js'
 
 import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
 import { connectDB } from './lib/db.js';
 import cors from "cors";
 
-const app = express();
+
 app.use(express.json({ limit: "5mb" })); // to parse json data from request body
 app.use(cors({
     origin: ENV.CLIENT_URL,
@@ -31,15 +32,15 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 //Deployment 
-if (ENV.NODE_ENV === 'production') {
-    const distPath = path.resolve(__dirname, "../Frontend/dist");
-    app.use(express.static(distPath));
-    app.get('*', (_, res) => {
-        res.sendFile(path.join(distPath, "index.html"));
-    });
-}
+// if (ENV.NODE_ENV === 'production') {
+//     const distPath = path.resolve(__dirname, "../Frontend/dist");
+//     app.use(express.static(distPath));
+//     app.get('*', (_, res) => {
+//         res.sendFile(path.join(distPath, "index.html"));
+//     });
+// }
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log('Server is running on port: ' + PORT);
     connectDB();
 })
