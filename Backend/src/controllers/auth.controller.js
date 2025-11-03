@@ -53,7 +53,7 @@ export const signup = async (req, res) => {
             } catch (error) {
                 console.error("Failed to send welcome email: ", error);
             }
-
+            
         } else {
             res.status(400).json({ message: "Invalid user data" })
         }

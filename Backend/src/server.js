@@ -31,14 +31,14 @@ const PORT = ENV.PORT || 3000;
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-//Deployment 
-// if (ENV.NODE_ENV === 'production') {
-//     const distPath = path.resolve(__dirname, "../Frontend/dist");
-//     app.use(express.static(distPath));
-//     app.get('*', (_, res) => {
-//         res.sendFile(path.join(distPath, "index.html"));
-//     });
-// }
+// Health check endpoint for deployment monitoring
+app.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        environment: ENV.NODE_ENV 
+    });
+});
 
 server.listen(PORT, () => {
     console.log('Server is running on port: ' + PORT);
